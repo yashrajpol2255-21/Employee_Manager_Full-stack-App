@@ -48,13 +48,62 @@ function App(){
     setEmployees(employees.filter(
       emp => emp.id !==id
     ));
-  };
+  }
+  const updateEmployee =
+async (
+  id,
+  name,
+  department
+) => {
+
+  const response =
+    await fetch(
+      `https://localhost:7252/api/employees/${id}`,
+      {
+        method: "PUT",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          id,
+          name,
+          department
+        })
+      }
+ );
+  
+  const updatedEmployee =
+     await response.json();
+
+  setEmployees(
+    employees.map(emp =>
+      emp.id === id
+      ? updatedEmployee
+      : emp
+    )
+  );
+};
+
+  ;
+    
 
   return (
     <div className="container">
-      <h1>
-        Employee Manager
+      <h1 className="title">
+           Employee Manager
       </h1>
+
+      <p className="subtitle">
+            Full Stack Employee Management Dashboard
+      </p>
+
+      <div className="employee-count">
+        <p>Total Employees</p>
+        <h2>{employees.length}</h2>
+      </div>
 
       <EmployeeForm
         addEmployee={addEmployee}
@@ -62,9 +111,10 @@ function App(){
       <EmployeeList
         employees={employees}
         deleteEmployee={deleteEmployee}
+        updateEmployee={updateEmployee}
         />
-
     </div>
-  );
+  )
 }
+        
 export default App;
